@@ -104,8 +104,7 @@ public class ClientLoginGUI extends JFrame implements ActionListener {
         this.userName = new JList(this.usernameListModel);
         userName.setFont(new Font("Consolas", Font.BOLD, 20));
         JScrollPane userNameScroll = new JScrollPane(this.userName);
-        userNameScroll.setMaximumSize(new Dimension(200, 200));
-        userNameScroll.setMinimumSize (new Dimension (200,200));
+        this.userName.setPreferredSize(new Dimension(200, 200));
 
         JPanel usernameList = new JPanel();
         usernameList.add(userNameListLabel);
@@ -139,6 +138,8 @@ public class ClientLoginGUI extends JFrame implements ActionListener {
                 this.serverNoti.setText("Connect successfully.");
                 this.loginNoti.setForeground(Color.GREEN);
                 this.loginNoti.setText("Login successfully.");
+
+                ClientChatBox chatbox = new ClientChatBox(700,600,db);
             }else if(!Objects.equals(IPServer, "127.0.0.1") && !Objects.equals(PortServer, "80")){
                 this.serverNoti.setForeground(Color.RED);
                 this.serverNoti.setText("Server not found.");
