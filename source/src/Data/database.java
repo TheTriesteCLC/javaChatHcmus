@@ -7,6 +7,8 @@ import java.util.List;
 
 public class database {
     private String[] existedUser;
+    private List<ChatRoom> chatRooms;
+    private List<List<Message>> messages;
     private final Processing dataProcess;
     public database(Processing dataProcess)
     {

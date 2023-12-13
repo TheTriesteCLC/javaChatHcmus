@@ -1,16 +1,12 @@
 package Data;
 
 import java.io.*;
-import java.nio.Buffer;
-import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
 
 public class Processing {
-    private String existedUserFileName;
-    private int existedUserFileLength;
-    private String[] existedUser;
+    private String userFileName;
+    private int userFileLength;
     public Processing() {
-        this.existedUserFileName = "userName.txt";
+        this.existedUserFileName = "source/userName.txt";
         this.existedUserFileLength = getFileLength(this.existedUserFileName);
 
         loadingUsername();

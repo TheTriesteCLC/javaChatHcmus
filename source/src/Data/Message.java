@@ -6,8 +6,8 @@ import java.util.List;
 public class Message {
     private String sender;
     private String content;
-    private List<String> receiver;
-    public Message(String sender, String content, ArrayList<String> receiver) {
+    private String receiver;
+    public Message(String sender, String content, String receiver) {
         this.sender = sender;
         this.content = content;
         this.receiver = receiver;
@@ -19,7 +19,7 @@ public class Message {
         return this.content;
     }
 
-    public List<String> getReceiver() {
+    public String getReceiver() {
         return receiver;
     }
 }
