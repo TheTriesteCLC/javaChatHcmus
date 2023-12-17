@@ -1,26 +1,28 @@
 package Data;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class Client {
     private String username;
-    private List<ChatRoom> chatRooms;
-    private List<List<Message>> allMessages;
-    public Client(String username, List<ChatRoom> chatRooms, List<List<Message>> allMessages) {
+    private ArrayList<String> chatRooms;
+    public Client(String username, ArrayList<String> chatRooms) {
         this.username = username;
         this.chatRooms = chatRooms;
-        this.allMessages = allMessages;
+    }
+    public void addChatroom(String newChatroom) {
+        this.chatRooms.add(newChatroom);
     }
 
     public String getUsername() {
         return username;
     }
 
-    public List<ChatRoom> getChatRooms() {
+    public ArrayList<String> getChatRooms() {
         return chatRooms;
     }
-
-    public List<List<Message>> getAllMessages() {
-        return allMessages;
+    public String toString() {
+        return String.format("%s --- %s",this.username,String.join(", ",this.chatRooms));
     }
 }

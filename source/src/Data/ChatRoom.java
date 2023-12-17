@@ -1,42 +1,59 @@
 package Data;
 
+import Data.Message;
+
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class ChatRoom {
-    private String roomname;
+    private String roomName;
     private String type;
-    private List<Message> messages;
-    private List<String> clients;
-    public ChatRoom(String roomname, String type ,List<String> clients) {
-        this.roomname = roomname;
+    private ArrayList<Message> messages;
+    private ArrayList<Client> clients;
+    public ChatRoom(String roomName, String type , ArrayList<Client> clients) {
+        this.roomName = roomName;
         this.type = type;
         this.messages = new ArrayList<Message>();
         this.clients = clients;
     }
-    public ChatRoom(String roomname, String type, List<Message> messages ,List<String> clients) {
-        this.roomname = roomname;
+    public ChatRoom(String roomName, String type, ArrayList<Message> messages , ArrayList<Client> clients) {
+        this.roomName = roomName;
         this.type = type;
         this.messages = messages;
         this.clients = clients;
     }
+
     public void addMessage(Message newMess) {
         this.messages.add(newMess);
     }
 
-    public String getRoomname() {
-        return roomname;
+    public String getRoomName() {
+        return roomName;
     }
 
     public String getType() {
         return type;
     }
 
-    public List<Message> getMessages() {
+    public ArrayList<Message> getMessages() {
         return messages;
     }
 
-    public List<String> getClients() {
+    public ArrayList<Client> getClients() {
         return clients;
+    }
+
+    public String toString() {
+        ArrayList<String> mess = new ArrayList<>();
+        ArrayList<String> client = new ArrayList<>();
+        for(Message tmp : this.messages) {
+            mess.add(tmp.toString());
+        }
+        for(Client tmp : this.clients) {
+            client.add(tmp.toString());
+        }
+        return String.format("%s --- %s --- %s --- %s",this.roomName, this.type, String.join(", ",mess),String.join(", ",client));
     }
 }

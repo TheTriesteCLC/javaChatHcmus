@@ -1,8 +1,6 @@
 import Data.ChatRoom;
-import Data.Message;
-import Data.Processing;
+import Data.Client;
 import Data.database;
-import GUI.ChatRoomPanel;
 import GUI.ClientChatBox;
 import GUI.ClientLoginGUI;
 
@@ -12,31 +10,15 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 import static javax.swing.JFrame.setDefaultLookAndFeelDecorated;
 
 public class Main {
     public static void main(String[] args) {
-//        Processing processing = new Processing();
-//        database db = new database(processing);
-//        ClientLoginGUI loginGui = new ClientLoginGUI(700,600,db);
-
-        //Creating a File object for directory
-        String path = "./source/userInfo";
-
-        File file = new File(path);
-        String[] directories = file.list(new FilenameFilter() {
-            @Override
-            public boolean accept(File dir, String name) {
-                return new File(dir, name).isDirectory();
-            }
-        });
-
-        System.out.println(Arrays.toString(directories));
-//        for(File x : directories) {
-//            System.out.println(x);
-//        }
+        database db = new database();
+        ClientLoginGUI loginGui = new ClientLoginGUI(700,600);
 
 
 //        List<String> clients = List.of(new String[]{"Anh", "Thu", "Tu"});
@@ -61,6 +43,20 @@ public class Main {
 //        mainFrame.pack();
 //        mainFrame.setVisible(true);
 
-//            ClientChatBox newChatBox = new ClientChatBox(500,500,db);
+//        Client client = db.getAllClients().get("tom");
+//        ChatRoom chatroom = db.getAllChatrooms().get("haha");
+////        ClientChatBox newChatBox = new ClientChatBox(500,500,client);
+//        ClientChatBox clientChatBox = new ClientChatBox(900,900,client, db);
+//        JFrame test = new JFrame();
+//        test.setDefaultLookAndFeelDecorated(true);
+//        test.setTitle("thu chatbox");
+//        test.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//        ChatRoomPanel newChatRoomPanel = new ChatRoomPanel(client,chatroom);
+//
+//        test.setContentPane(newChatRoomPanel);
+//        test.setMinimumSize(new Dimension(500, 500));
+//        test.pack();
+//        test.setVisible(true);
+//        ClientLoginGUI clientLoginGUI = new ClientLoginGUI(500,500, db);
     }
 }

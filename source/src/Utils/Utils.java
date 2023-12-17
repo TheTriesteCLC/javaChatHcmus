@@ -5,7 +5,7 @@ import java.awt.*;
 import java.util.HashMap;
 
 public class Utils {
-    public static JPanel setPadding(JPanel jPanel, int paddingY, int paddingX, boolean hasBorder)
+    public static JPanel setPadding(JPanel jPanel, int paddingY, int paddingX, boolean hasBorder, String titleBorder)
     {
         JPanel padY = new JPanel();
         padY.setLayout(new BoxLayout(padY,BoxLayout.PAGE_AXIS));
@@ -21,11 +21,19 @@ public class Utils {
         padX.add(padY);
         padX.add(Box.createRigidArea(new Dimension(paddingX,0)));
 
-        if(hasBorder)
+        if(hasBorder && !titleBorder.isBlank())
         {
+            padX.setBorder(BorderFactory.createTitledBorder(titleBorder));
+        }else if(hasBorder) {
             padX.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY));
         }
         return padX;
+    }
+    public static void setBorderWithTitle(JPanel jPanel, String titleBorder) {
+        if(!titleBorder.isBlank())
+        {
+            jPanel.setBorder(BorderFactory.createTitledBorder(titleBorder));
+        }
     }
     public static String[][] convertHashMapToTableData(HashMap<String, String[]> rawData)
     {

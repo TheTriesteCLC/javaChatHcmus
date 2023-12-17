@@ -10,7 +10,7 @@ import java.awt.event.ActionListener;
 import java.util.List;
 import java.util.Objects;
 
-public class ClientChatBoxLeft extends JPanel implements ActionListener {
+public class ClientChatBoxLeft extends JPanel {
     private JLabel userLabel;
     private JList userList;
     private JButton chatWithUserButton;
@@ -23,26 +23,26 @@ public class ClientChatBoxLeft extends JPanel implements ActionListener {
 
         this.userLabel = new JLabel("Users");
         this.userListModel = new DefaultListModel<String>();
-        List<ChatRoom> allChatRooms = this.currClient.getChatRooms();
-        for(ChatRoom chatroom : allChatRooms) {
-            if(!Objects.equals(chatroom.getType(), "group")){
-                this.userListModel.addElement(chatroom.getRoomname());
-            }
+        List<String> allChatRooms = this.currClient.getChatRooms();
+        for(String chatroom : allChatRooms) {
+            this.userListModel.addElement(chatroom);
         }
+
         this.userList = new JList<>(this.userListModel);
-        this.userList.setFont(new Font("Consolas", Font.BOLD, 30));
+        this.userList.setFont(new Font("Consolas", Font.BOLD, 25));
         JScrollPane usersSroll = new JScrollPane(this.userList);
+        usersSroll.setPreferredSize(new Dimension(200,600));
         this.chatWithUserButton = new JButton("Chat now");
 
         this.add(userLabel);
         this.add(usersSroll);
         this.add(chatWithUserButton);
-
-        this.chatWithUserButton.addActionListener(this);
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-
+    public JButton getChatWithUserButton() {
+        return this.chatWithUserButton;
+    }
+    public JList getUserList() {
+        return this.userList;
     }
 }

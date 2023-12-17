@@ -6,11 +6,11 @@ import java.util.List;
 public class Message {
     private String sender;
     private String content;
-    private String receiver;
-    public Message(String sender, String content, String receiver) {
+    private String chatroom;
+    public Message(String sender, String content, String chatroom) {
         this.sender = sender;
         this.content = content;
-        this.receiver = receiver;
+        this.chatroom = chatroom;
     }
     public String getSender() {
         return this.sender;
@@ -18,8 +18,10 @@ public class Message {
     public String getContent() {
         return this.content;
     }
-
-    public String getReceiver() {
-        return receiver;
+    public String getChatroom() {
+        return chatroom;
+    }
+    public String toString() {
+        return this.sender + ": " + this.content + "+to+" + this.chatroom;
     }
 }
