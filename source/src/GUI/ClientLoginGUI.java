@@ -2,7 +2,7 @@ package GUI;
 
 import Data.ChatRoom;
 import Data.Client;
-import Data.database;
+import Data.ClientSocket;
 import Utils.Utils;
 
 import javax.swing.*;
@@ -37,8 +37,8 @@ public class ClientLoginGUI extends JFrame implements ActionListener {
     private JLabel signupNoti;
     private JLabel userNameListLabel;
     private JList userName;
-    private ArrayList<String> usernameList;
     private DefaultListModel<String> usernameListModel;
+    private ClientSocket clientSocket;
     public ClientLoginGUI(int width, int height)
     {
         setDefaultLookAndFeelDecorated(true);
@@ -86,7 +86,7 @@ public class ClientLoginGUI extends JFrame implements ActionListener {
         loginPanel.add(this.loginNoti);
 
         //Create Signup panel
-        this.userNameSignUpLabel = new JLabel("Username:");
+        this.userNameSignUpLabel = new JLabel("New username (Space and ',' and '--' not allowed) :");
         this.userNameSignUp = new JTextField();
         this.signUpButton = new JButton("Sign up");
         this.signupNoti = new JLabel();
@@ -103,7 +103,6 @@ public class ClientLoginGUI extends JFrame implements ActionListener {
         //Create Existed Username List panel
         this.userNameListLabel = new JLabel("Existed username");
 
-        this.usernameList = new ArrayList<String>();
         this.usernameListModel = new DefaultListModel<String>();
 
         this.userName = new JList(this.usernameListModel);
@@ -137,22 +136,11 @@ public class ClientLoginGUI extends JFrame implements ActionListener {
             String IP = this.serverIP.getText();
             String port = this.serverPort.getText();
 
-            Socket socketUserList = new Socket();
-            try {
-                socketUserList = new Socket(IP, Integer.parseInt(port));
-                System.out.println("Connecting to " + IP + " on port " + port);
+            this.clientSocket = new ClientSocket(IP,Integer.parseInt(port));
+            ArrayList<String> usernameList = this.clientSocket.getUsername();
 
-                InputStream is = socketUserList.getInputStream();
-                ObjectInputStream ois = new ObjectInputStream(is);
-
-                this.usernameList = (ArrayList<String>) ois.readObject();
-            } catch (IOException ex) {
-                System.out.println("Runtime exception !!!!");
-            } catch (ClassNotFoundException ex) {
-                System.out.println("Class not found !!!!");
-            }
-            if(socketUserList.isConnected()) {
-                for(String username : this.usernameList) {
+            if(this.clientSocket.clientSocket.isConnected()) {
+                for(String username : usernameList) {
                     usernameListModel.addElement(username);
                 }
                 this.userName.updateUI();
@@ -163,20 +151,62 @@ public class ClientLoginGUI extends JFrame implements ActionListener {
                 this.serverNoti.setText("Server not found.");
             }
         }
-//        if(e.getSource() == this.loginButton)
-//        {
-//            String loginUsername = this.userNameLogin.getText();
-//            String IPServer = this.serverIP.getText();
-//            String PortServer = this.serverPort.getText();
-//
+        if(e.getSource() == this.loginButton)
+        {
+            if(this.clientSocket != null) {
+                String loginUsername = this.userNameLogin.getText();
+                boolean isExisted = false;
+                for(int i = 0; i < this.usernameListModel.getSize(); ++i) {
+                    if(Objects.equals(loginUsername, this.usernameListModel.getElementAt(i))) {
+                        isExisted = true;
+                        break;
+                    }
+                }
+                if(isExisted) {
+                    Client currClient = this.clientSocket.getClientData(loginUsername);
+                    ClientChatBox currClientChatBox = new ClientChatBox(900,900,this.clientSocket,currClient,5);
+                }
+            }else {
+                this.loginNoti.setForeground(Color.RED);
+                this.loginNoti.setText("Server not found.");
+            }
 //            if(this.usernameList.isEmpty()) {
-//                this.loginNoti.setForeground(Color.GREEN);
+//                this.loginNoti.setForeground(Color.RED);
 //                this.loginNoti.setText("Cannot login, please conenct to server first");
 //            }else if(this.usernameList.contains(loginUsername)) {
 //                this.loginNoti.setForeground(Color.GREEN);
 //                this.loginNoti.setText("Login successfully.");
 //
-//                ClientChatBox chatbox = new ClientChatBox(700,600);
+//                Socket socketClientData = new Socket();
+//                try {
+//                    socketClientData = new Socket(IP, Integer.parseInt(port));
+//                    System.out.println("Connecting to " + IP + " on port " + port);
+//
+//
+//                    OutputStream os = socketClientData.getOutputStream();
+//                    ObjectOutputStream oos = new ObjectOutputStream(os);
+//                    BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(os));
+//
+//                    InputStream is = socketClientData.getInputStream();
+//                    ObjectInputStream ois = new ObjectInputStream(is);
+//                    BufferedReader br = new BufferedReader(new InputStreamReader(is));
+//
+//                    String requestClientData = String.format("GET clientData %s",loginUsername);
+//
+//                    bw.write(requestClientData);
+//                    bw.newLine();
+//                    bw.flush();
+//
+//                    Client receiveClientData = (Client) ois.readObject();
+//                    if(receiveClientData != null) {
+//                        System.out.println(receiveClientData.toString());
+//                    }
+//
+//                } catch (IOException ex) {
+//                    System.out.println("Runtime exception !!!!");
+//                } catch (ClassNotFoundException ex) {
+//                    System.out.println("Class not found !!!!");
+//                }
 //            }
 //
 //            if(Arrays.asList(allClients.keySet()).contains(loginUsername)) {
@@ -190,27 +220,41 @@ public class ClientLoginGUI extends JFrame implements ActionListener {
 //                this.loginNoti.setForeground(Color.RED);
 //                this.loginNoti.setText("Username not found.");
 //            }
-//        }
-//        if(e.getSource() == this.signUpButton)
-//        {
-//            String newUsername = this.userNameSignUp.getText();
-//            Client newClient = new Client(newUsername ,new ArrayList<String>());
-//            HashMap<String,Client> allClients = this.db.getAllClients();;
-//            if(!Arrays.asList(allClients.keySet()).contains(newUsername) &&
-//            !newUsername.trim().isEmpty()) {
-//                this.signupNoti.setForeground(Color.GREEN);
-//                this.signupNoti.setText("Create new user successfully.");
-//                this.db.addNewUser(newClient);
-//
-//                this.usernameListModel.addElement(newUsername);
-//                this.userName.updateUI();
-//            }else if(newUsername.trim().isEmpty()){
-//                this.signupNoti.setForeground(Color.RED);
-//                this.signupNoti.setText("Username cannot be empty.");
-//            }else {
-//                this.signupNoti.setForeground(Color.RED);
-//                this.signupNoti.setText("Username existed.");
-//            }
-//        }
+        }
+        if(e.getSource() == this.signUpButton)
+        {
+            if(this.clientSocket != null) {
+                String newUsername = this.userNameSignUp.getText();
+                if(!newUsername.contains(" ") && !newUsername.contains("-")) {
+                    ArrayList<String> usernames = new ArrayList<>();
+                    for(int i = 0; i < this.usernameListModel.getSize(); ++i) {
+                        usernames.add(this.usernameListModel.get(i));
+                    }
+
+                    if(!usernames.contains(newUsername) &&
+                            !newUsername.trim().isEmpty()) {
+                        this.signupNoti.setForeground(Color.GREEN);
+                        this.signupNoti.setText("Create new user successfully.");
+                        Client newUser = new Client(newUsername);
+                        this.clientSocket.createNewUser(newUser);
+
+                        this.usernameListModel.addElement(newUsername);
+                        this.userName.updateUI();
+                    }else if(newUsername.trim().isEmpty()){
+                        this.signupNoti.setForeground(Color.RED);
+                        this.signupNoti.setText("Username cannot be empty.");
+                    }else {
+                        this.signupNoti.setForeground(Color.RED);
+                        this.signupNoti.setText("Username existed.");
+                    }
+                }else {
+                    this.signupNoti.setForeground(Color.RED);
+                    this.signupNoti.setText("Username violated.");
+                }
+            }else {
+                this.signupNoti.setForeground(Color.RED);
+                this.signupNoti.setText("Server not found.");
+            }
+        }
     }
 }

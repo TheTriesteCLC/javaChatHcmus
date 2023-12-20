@@ -1,24 +1,8 @@
-import Data.ChatRoom;
-import Data.Client;
-import Data.database;
-import GUI.ClientChatBox;
 import GUI.ClientLoginGUI;
 
-import javax.swing.*;
-import java.awt.*;
-import java.io.File;
-import java.io.FilenameFilter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-
-import static javax.swing.JFrame.setDefaultLookAndFeelDecorated;
-
-public class Main {
+public class ClientApp {
     public static void main(String[] args) {
-        database db = new database();
-        ClientLoginGUI loginGui = new ClientLoginGUI(700,600);
+        ClientLoginGUI loginGui = new ClientLoginGUI(900,600);
 
 
 //        List<String> clients = List.of(new String[]{"Anh", "Thu", "Tu"});
